@@ -1,0 +1,45 @@
+---
+// 定义博客文章属性接口
+interface Props {
+  title: string;
+  description: string;
+  date: string;
+  image: string;
+  slug: string;
+  category: string;
+  tags: string[];
+}
+
+// 通过props获取博客文章信息
+const { title, description, date, image, slug, category, tags = [] } = Astro.props;
+
+// 格式化日期
+function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+const formattedDate = formatDate(date);
+---
+
+<a href={`/blog/${slug}`} class="bg-gray-50 dark:bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+  <div class="h-48 bg-gray-200 dark:bg-gray-700 relative">
+    <img src={image} alt={title} class="w-full h-full object-cover" />
+    <div class="absolute top-3 left-3 px-2 py-1 bg-blue-500 text-white text-xs rounded">
+      {category}
+    </div>
+  </div>
+  <div class="p-6">
+    <div class="text-sm text-gray-500 dark:text-gray-400 mb-2">{formattedDate}</div>
+    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">{title}</h3>
+    <p class="text-gray-600 dark:text-gray-300 mb-4">{description.length > 120 ? description.substring(0, 120) + '...' : description}</p>
+    <div class="flex flex-wrap gap-2">
+      {tags.slice(0, 3).map((tag: string) => (
+        <span class="px-2 py-1 bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 text-xs rounded-full">{tag}</span>
+      ))}
+    </div>
+  </div>
+</a> 

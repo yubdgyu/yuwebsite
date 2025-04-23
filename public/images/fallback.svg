@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="450" viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="450" fill="#f5f5f5"/>
+  <g fill="#aaaaaa">
+    <path d="M395 225 L430 260 L430 190 Z"/>
+    <path d="M405 225 L370 190 L370 260 Z"/>
+  </g>
+  <text x="400" y="300" font-family="Arial" font-size="24" text-anchor="middle" fill="#666666">图片未加载</text>
+</svg> 

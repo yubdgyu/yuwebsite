@@ -1,0 +1,185 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SocialIcons from '../components/SocialIcons';
+
+// 这里将来会从 Decap CMS 获取项目数据
+// 现在使用模拟数据
+const projects = [
+  {
+    title: "个人博客系统",
+    description: "基于Astro.js和TailwindCSS构建的现代化个人博客系统，支持Markdown内容管理，拥有黑暗模式和响应式设计。",
+    image: "/images/projects/1.jpg",
+    github: "https://github.com/",
+    tags: ["Astro.js", "TailwindCSS", "TypeScript"]
+  },
+  {
+    title: "在线商城平台",
+    description: "使用Vue3和Node.js开发的全栈电商平台，包含用户认证、商品浏览、购物车和支付流程等完整功能。",
+    image: "/images/projects/2.jpg",
+    github: "https://github.com/",
+    tags: ["Vue", "Node.js", "Express"]
+  },
+  {
+    title: "任务管理应用",
+    description: "React Native开发的跨平台任务管理应用，支持任务创建、分类、提醒和数据同步功能。",
+    image: "/images/projects/3.jpg",
+    github: "https://github.com/",
+    tags: ["React Native", "Firebase", "Redux"]
+  },
+  {
+    title: "AI图像处理工具",
+    description: "基于TensorFlow.js的在线图像处理工具，能够实现风格迁移、图像分类和对象检测等AI功能。",
+    image: "/images/projects/4.jpg",
+    github: "https://github.com/",
+    tags: ["React", "TensorFlow.js", "WebGL"]
+  },
+  {
+    title: "社区问答平台",
+    description: "类似Stack Overflow的技术问答社区，使用Django和React构建，支持问题发布、回答、投票和标签系统。",
+    image: "/images/projects/5.jpg",
+    github: "https://github.com/",
+    tags: ["Django", "React", "PostgreSQL"]
+  },
+  {
+    title: "天气预报应用",
+    description: "基于公共API的天气预报应用，具有精美UI和动画效果，支持全球城市天气查询和多日预报。",
+    image: "/images/projects/6.jpg",
+    github: "https://github.com/",
+    tags: ["Svelte", "OpenWeatherAPI", "D3.js"]
+  }
+];
+---
+
+<Layout title="项目展示 - Yu的个人网站">
+  <div class="container mx-auto px-4 py-16 pt-28">
+    <div class="text-center mb-16">
+      <h1 class="text-4xl md:text-5xl font-bold mb-6 text-gray-800 dark:text-white">我的项目</h1>
+      <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+        这些是我近期完成的一些项目作品，涵盖了不同技术栈和应用场景，展示了我的技术能力和创新思维。
+      </p>
+    </div>
+    
+    <!-- 项目筛选（将来可实现） -->
+    <!-- <div class="flex flex-wrap gap-2 justify-center mb-12">
+      <button class="px-4 py-2 bg-gray-800 dark:bg-white text-white dark:text-gray-900 rounded-full text-sm font-medium">全部</button>
+      <button class="px-4 py-2 bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 rounded-full text-sm font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition">前端</button>
+      <button class="px-4 py-2 bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 rounded-full text-sm font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition">后端</button>
+      <button class="px-4 py-2 bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 rounded-full text-sm font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition">全栈</button>
+      <button class="px-4 py-2 bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 rounded-full text-sm font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition">移动应用</button>
+    </div> -->
+    
+    <!-- 项目网格 -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {projects.map((project) => (
+        <div class="bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden transition-transform hover:scale-105 flex flex-col h-full">
+          <div class="relative h-48 overflow-hidden">
+            <img 
+              src={project.image}
+              alt={`${project.title}封面`} 
+              class="w-full h-full object-cover transition-transform hover:scale-110"
+            />
+          </div>
+          <div class="p-4 flex-grow">
+            <h3 class="text-xl font-semibold mb-2 text-gray-800 dark:text-white">{project.title}</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-2">{project.description}</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              {project.tags.map((tag) => (
+                <span class="px-2 py-1 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 text-xs rounded">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div class="px-6 pb-6 mt-auto">
+            <a 
+              href={project.github} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="inline-flex items-center justify-center w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition"
+            >
+              <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path>
+              </svg>
+              <span class="hover:text-gray-900 dark:hover:text-gray-200">查看源码</span>
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  /* 通过CSS变量解决Astro中使用动态类名的问题 */
+  .bg-blue-100 { background-color: rgba(219, 234, 254, var(--tw-bg-opacity, 1)); }
+  .bg-sky-100 { background-color: rgba(224, 242, 254, var(--tw-bg-opacity, 1)); }
+  .bg-indigo-100 { background-color: rgba(224, 231, 255, var(--tw-bg-opacity, 1)); }
+  .bg-green-100 { background-color: rgba(220, 252, 231, var(--tw-bg-opacity, 1)); }
+  .bg-emerald-100 { background-color: rgba(209, 250, 229, var(--tw-bg-opacity, 1)); }
+  .bg-teal-100 { background-color: rgba(204, 251, 241, var(--tw-bg-opacity, 1)); }
+  .bg-violet-100 { background-color: rgba(237, 233, 254, var(--tw-bg-opacity, 1)); }
+  .bg-orange-100 { background-color: rgba(255, 237, 213, var(--tw-bg-opacity, 1)); }
+  .bg-purple-100 { background-color: rgba(243, 232, 255, var(--tw-bg-opacity, 1)); }
+  .bg-red-100 { background-color: rgba(254, 226, 226, var(--tw-bg-opacity, 1)); }
+  .bg-pink-100 { background-color: rgba(252, 231, 243, var(--tw-bg-opacity, 1)); }
+  .bg-rose-100 { background-color: rgba(255, 228, 230, var(--tw-bg-opacity, 1)); }
+  .bg-yellow-100 { background-color: rgba(254, 249, 195, var(--tw-bg-opacity, 1)); }
+  .bg-amber-100 { background-color: rgba(254, 243, 199, var(--tw-bg-opacity, 1)); }
+  .bg-lime-100 { background-color: rgba(236, 252, 203, var(--tw-bg-opacity, 1)); }
+  .bg-cyan-100 { background-color: rgba(207, 250, 254, var(--tw-bg-opacity, 1)); }
+  .bg-fuchsia-100 { background-color: rgba(250, 232, 255, var(--tw-bg-opacity, 1)); }
+  
+  .bg-blue-900 { background-color: rgba(30, 58, 138, var(--tw-bg-opacity, 1)); }
+  .bg-sky-900 { background-color: rgba(12, 74, 110, var(--tw-bg-opacity, 1)); }
+  .bg-indigo-900 { background-color: rgba(49, 46, 129, var(--tw-bg-opacity, 1)); }
+  .bg-green-900 { background-color: rgba(20, 83, 45, var(--tw-bg-opacity, 1)); }
+  .bg-emerald-900 { background-color: rgba(6, 78, 59, var(--tw-bg-opacity, 1)); }
+  .bg-teal-900 { background-color: rgba(19, 78, 74, var(--tw-bg-opacity, 1)); }
+  .bg-violet-900 { background-color: rgba(76, 29, 149, var(--tw-bg-opacity, 1)); }
+  .bg-orange-900 { background-color: rgba(124, 45, 18, var(--tw-bg-opacity, 1)); }
+  .bg-purple-900 { background-color: rgba(88, 28, 135, var(--tw-bg-opacity, 1)); }
+  .bg-red-900 { background-color: rgba(127, 29, 29, var(--tw-bg-opacity, 1)); }
+  .bg-pink-900 { background-color: rgba(131, 24, 67, var(--tw-bg-opacity, 1)); }
+  .bg-rose-900 { background-color: rgba(136, 19, 55, var(--tw-bg-opacity, 1)); }
+  .bg-yellow-900 { background-color: rgba(113, 63, 18, var(--tw-bg-opacity, 1)); }
+  .bg-amber-900 { background-color: rgba(120, 53, 15, var(--tw-bg-opacity, 1)); }
+  .bg-lime-900 { background-color: rgba(54, 83, 20, var(--tw-bg-opacity, 1)); }
+  .bg-cyan-900 { background-color: rgba(22, 78, 99, var(--tw-bg-opacity, 1)); }
+  .bg-fuchsia-900 { background-color: rgba(112, 26, 117, var(--tw-bg-opacity, 1)); }
+  
+  .text-blue-800 { color: rgba(30, 64, 175, var(--tw-text-opacity, 1)); }
+  .text-sky-800 { color: rgba(7, 89, 133, var(--tw-text-opacity, 1)); }
+  .text-indigo-800 { color: rgba(55, 48, 163, var(--tw-text-opacity, 1)); }
+  .text-green-800 { color: rgba(22, 101, 52, var(--tw-text-opacity, 1)); }
+  .text-emerald-800 { color: rgba(6, 95, 70, var(--tw-text-opacity, 1)); }
+  .text-teal-800 { color: rgba(17, 94, 89, var(--tw-text-opacity, 1)); }
+  .text-violet-800 { color: rgba(91, 33, 182, var(--tw-text-opacity, 1)); }
+  .text-orange-800 { color: rgba(154, 52, 18, var(--tw-text-opacity, 1)); }
+  .text-purple-800 { color: rgba(107, 33, 168, var(--tw-text-opacity, 1)); }
+  .text-red-800 { color: rgba(153, 27, 27, var(--tw-text-opacity, 1)); }
+  .text-pink-800 { color: rgba(157, 23, 77, var(--tw-text-opacity, 1)); }
+  .text-rose-800 { color: rgba(159, 18, 57, var(--tw-text-opacity, 1)); }
+  .text-yellow-800 { color: rgba(133, 77, 14, var(--tw-text-opacity, 1)); }
+  .text-amber-800 { color: rgba(146, 64, 14, var(--tw-text-opacity, 1)); }
+  .text-lime-800 { color: rgba(63, 98, 18, var(--tw-text-opacity, 1)); }
+  .text-cyan-800 { color: rgba(21, 94, 117, var(--tw-text-opacity, 1)); }
+  .text-fuchsia-800 { color: rgba(134, 25, 143, var(--tw-text-opacity, 1)); }
+  
+  .text-blue-200 { color: rgba(191, 219, 254, var(--tw-text-opacity, 1)); }
+  .text-sky-200 { color: rgba(186, 230, 253, var(--tw-text-opacity, 1)); }
+  .text-indigo-200 { color: rgba(199, 210, 254, var(--tw-text-opacity, 1)); }
+  .text-green-200 { color: rgba(187, 247, 208, var(--tw-text-opacity, 1)); }
+  .text-emerald-200 { color: rgba(167, 243, 208, var(--tw-text-opacity, 1)); }
+  .text-teal-200 { color: rgba(153, 246, 228, var(--tw-text-opacity, 1)); }
+  .text-violet-200 { color: rgba(221, 214, 254, var(--tw-text-opacity, 1)); }
+  .text-orange-200 { color: rgba(254, 215, 170, var(--tw-text-opacity, 1)); }
+  .text-purple-200 { color: rgba(233, 213, 255, var(--tw-text-opacity, 1)); }
+  .text-red-200 { color: rgba(254, 202, 202, var(--tw-text-opacity, 1)); }
+  .text-pink-200 { color: rgba(251, 207, 232, var(--tw-text-opacity, 1)); }
+  .text-rose-200 { color: rgba(254, 205, 211, var(--tw-text-opacity, 1)); }
+  .text-yellow-200 { color: rgba(254, 240, 138, var(--tw-text-opacity, 1)); }
+  .text-amber-200 { color: rgba(253, 230, 138, var(--tw-text-opacity, 1)); }
+  .text-lime-200 { color: rgba(217, 249, 157, var(--tw-text-opacity, 1)); }
+  .text-cyan-200 { color: rgba(165, 243, 252, var(--tw-text-opacity, 1)); }
+  .text-fuchsia-200 { color: rgba(245, 208, 254, var(--tw-text-opacity, 1)); }
+</style> 

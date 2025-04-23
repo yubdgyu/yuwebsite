@@ -1,0 +1,146 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SocialIcons from '../components/SocialIcons';
+
+interface Skill {
+  name: string;
+  level: number; // 0-100
+  color: string;
+}
+
+// 技能列表
+const skills: Skill[] = [
+  { name: "React", level: 90, color: "blue" },
+  { name: "TypeScript", level: 85, color: "indigo" },
+  { name: "Node.js", level: 80, color: "green" },
+  { name: "TailwindCSS", level: 95, color: "sky" },
+  { name: "Vue.js", level: 75, color: "emerald" },
+  { name: "Python", level: 70, color: "yellow" },
+  { name: "GraphQL", level: 65, color: "purple" },
+  { name: "Docker", level: 60, color: "cyan" }
+];
+
+// 工作经历
+const experiences = [
+  {
+    period: "2021 - 至今",
+    position: "高级前端开发工程师",
+    company: "某科技有限公司",
+    description: "负责公司核心产品的前端架构设计和开发，优化用户体验和性能，带领前端团队进行技术选型和规范制定。"
+  },
+  {
+    period: "2018 - 2021",
+    position: "全栈开发工程师",
+    company: "某互联网公司",
+    description: "使用React和Node.js进行全栈开发，参与从产品设计到最终实现的完整流程，实现了多个关键业务模块。"
+  },
+  {
+    period: "2016 - 2018",
+    position: "前端开发工程师",
+    company: "某软件企业",
+    description: "负责企业管理系统的前端开发，使用Vue.js构建响应式界面，与后端团队协作完成产品迭代。"
+  }
+];
+---
+
+<Layout title="关于我 - Yu的个人网站">
+  <div class="container mx-auto px-4 py-16 pt-28">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-4xl md:text-5xl font-bold mb-8 text-center text-gray-800 dark:text-white">关于我</h1>
+      
+      <!-- 个人信息区域 -->
+      <div class="bg-white dark:bg-gray-700 rounded-lg shadow-xl overflow-hidden mb-16">
+        <div class="md:flex">
+          <!-- 左侧照片 -->
+          <div class="md:w-1/3 bg-blue-50 dark:bg-gray-800 p-8 flex items-center justify-center">
+            <div class="w-48 h-48 rounded-full overflow-hidden border-4 border-white dark:border-gray-600 shadow-lg">
+              <img 
+                src="https://avatars.githubusercontent.com/u/19257889?s=400&u=f0cedbee758981c484fff191c0ae45edcca80d21&v=4" 
+                alt="个人照片" 
+                class="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+          
+          <!-- 右侧介绍 -->
+          <div class="md:w-2/3 p-8">
+            <h2 class="text-2xl font-bold mb-2 text-gray-800 dark:text-white">Yu</h2>
+            <p class="text-gray-600 dark:text-gray-300 mb-6">全栈开发工程师 / UI设计爱好者</p>
+            
+            <div class="text-gray-700 dark:text-gray-300 space-y-4">
+              <p>
+                嗨，我是Yu，一名专注于创建美观且实用的web应用的全栈开发者。我热衷于将创意转化为代码，构建能够提升用户体验的数字产品。
+              </p>
+              <p>
+                我有5年以上的前端开发经验，精通React和TypeScript，并且对后端技术如Node.js和数据库也有深入研究。我追求代码质量和性能优化，努力在每个项目中应用最佳实践。
+              </p>
+              <p>
+                在业余时间，我喜欢研究最新的web技术，参与开源项目，以及撰写技术博客分享我的知识和经验。
+              </p>
+            </div>
+            
+            <div class="mt-6">
+              <SocialIcons client:visible />
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 技能部分 -->
+      <section class="mb-16">
+        <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">技能专长</h2>
+        <div class="space-y-4">
+          {skills.map((skill) => (
+            <div class="mb-2">
+              <div class="flex justify-between mb-1">
+                <span class="text-gray-700 dark:text-gray-300">{skill.name}</span>
+                <span class="text-gray-700 dark:text-gray-300">{skill.level}%</span>
+              </div>
+              <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2.5">
+                <div 
+                  class={`h-2.5 rounded-full bg-${skill.color}-500`}
+                  style={{ width: `${skill.level}%` }}
+                ></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+      
+      <!-- 工作经历 -->
+      <section>
+        <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">工作经历</h2>
+        <div class="relative border-l-2 border-gray-300 dark:border-gray-600 pl-8 pb-6 ml-4">
+          {experiences.map((exp, index) => (
+            <div class="mb-10 relative">
+              <!-- 时间轴圆点 -->
+              <div class="absolute -left-11 w-5 h-5 rounded-full bg-gray-800 dark:bg-white"></div>
+              
+              <!-- 时间段 -->
+              <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">{exp.period}</div>
+              
+              <!-- 职位和公司 -->
+              <h3 class="text-xl font-semibold text-gray-800 dark:text-white">{exp.position}</h3>
+              <div class="text-gray-700 dark:text-gray-300 mb-2">{exp.company}</div>
+              
+              <!-- 描述 -->
+              <p class="text-gray-600 dark:text-gray-300">{exp.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  /* 处理动态颜色类 */
+  .bg-blue-500 { background-color: rgba(59, 130, 246, var(--tw-bg-opacity, 1)); }
+  .bg-indigo-500 { background-color: rgba(99, 102, 241, var(--tw-bg-opacity, 1)); }
+  .bg-green-500 { background-color: rgba(34, 197, 94, var(--tw-bg-opacity, 1)); }
+  .bg-sky-500 { background-color: rgba(14, 165, 233, var(--tw-bg-opacity, 1)); }
+  .bg-emerald-500 { background-color: rgba(16, 185, 129, var(--tw-bg-opacity, 1)); }
+  .bg-yellow-500 { background-color: rgba(234, 179, 8, var(--tw-bg-opacity, 1)); }
+  .bg-purple-500 { background-color: rgba(168, 85, 247, var(--tw-bg-opacity, 1)); }
+  .bg-cyan-500 { background-color: rgba(6, 182, 212, var(--tw-bg-opacity, 1)); }
+</style> 

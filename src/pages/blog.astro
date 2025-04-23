@@ -1,0 +1,147 @@
+---
+import Layout from '../layouts/Layout.astro';
+// 使用标准Node.js模块导入
+import { promises as fs } from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
+
+// 定义博客文章类型
+interface BlogPost {
+  title: string;
+  description: string;
+  date: string;
+  author: string;
+  authorImage: string;
+  category: string;
+  readingTime: string;
+  image: string;
+  slug: string;
+  tags: string[];
+}
+
+// 获取所有博客文章
+const contentDir = path.join(process.cwd(), 'public/content/blog');
+const files = await fs.readdir(contentDir);
+const markdownFiles = files.filter((file: string) => file.endsWith('.md'));
+
+// 处理每个Markdown文件
+const blogPosts: BlogPost[] = [];
+for (const file of markdownFiles) {
+  const filePath = path.join(contentDir, file);
+  const content = await fs.readFile(filePath, 'utf-8');
+  const { data } = matter(content);
+  
+  blogPosts.push({
+    title: data.title,
+    description: data.description,
+    date: data.date,
+    author: data.author,
+    authorImage: data.authorImage,
+    category: data.category,
+    readingTime: data.readingTime,
+    image: data.image || "/images/fallback.svg",
+    slug: data.slug,
+    tags: data.tags
+  });
+}
+
+// 提取所有分类
+const categories = [...new Set(blogPosts.map(post => post.category))];
+
+// 排序博客文章，最新的在前面
+blogPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+// 日期格式化函数
+function formatDate(dateString: string) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('zh-CN', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+}
+---
+
+<Layout title="博客 - Yu的个人网站">
+  <div class="container mx-auto px-4 py-16 pt-28">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-16">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 text-gray-800 dark:text-white">博客</h1>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          分享我的技术见解、学习心得和行业动态，希望这些内容对你有所帮助。
+        </p>
+      </div>
+      
+      <!-- 分类筛选 -->
+      <div class="flex flex-wrap gap-2 justify-center mb-12">
+        <a href="/blog" class="px-4 py-2 bg-gray-800 dark:bg-white text-white dark:text-gray-900 rounded-full text-sm font-medium transition-all duration-300 hover:shadow-md hover:scale-105">全部文章</a>
+        {categories.map((category) => (
+          <a 
+            href={`/blog/category/${category.toLowerCase().replace(/\s+/g, '-')}`} 
+            class="px-4 py-2 bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 rounded-full text-sm font-medium transition-all duration-300 hover:bg-gray-300 dark:hover:bg-gray-600 hover:shadow-md hover:scale-105"
+          >
+            {category}
+          </a>
+        ))}
+      </div>
+      
+      <!-- 博客列表 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {blogPosts.map((post) => (
+          <article class="bg-white dark:bg-gray-700 rounded-lg shadow-md overflow-hidden flex flex-col h-full transform transition-transform hover:scale-105">
+            <a href={`/blog/${post.slug}`} class="block relative h-48 overflow-hidden">
+              <img 
+                src={post.image} 
+                alt={post.title} 
+                class="w-full h-full object-cover transition-transform hover:scale-110"
+              />
+              <div class="absolute top-4 left-4">
+                <span class="px-3 py-1 bg-gray-800 dark:bg-white text-white dark:text-gray-900 text-xs font-medium rounded-full">
+                  {post.category}
+                </span>
+              </div>
+            </a>
+            
+            <div class="p-6 flex-grow flex flex-col">
+              <div class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                {formatDate(post.date)}
+              </div>
+              
+              <h2 class="text-xl font-semibold mb-3 text-gray-800 dark:text-white">
+                <a href={`/blog/${post.slug}`} class="hover:text-gray-600 dark:hover:text-gray-300">
+                  {post.title}
+                </a>
+              </h2>
+              
+              <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3 flex-grow">
+                {post.description}
+              </p>
+              
+              <div class="flex flex-wrap gap-2 mb-4">
+                {post.tags.map((tag) => (
+                  <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 text-xs rounded hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer transition-colors">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              
+              <a href={`/blog/${post.slug}`} class="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 inline-flex items-center mt-auto group">
+                阅读全文
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+      
+      {blogPosts.length === 0 && (
+        <div class="py-20 text-center">
+          <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">暂无博客文章</h3>
+          <p class="text-gray-500 dark:text-gray-400">请稍后再来查看</p>
+        </div>
+      )}
+    </div>
+  </div>
+</Layout> 

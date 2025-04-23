@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yu的个人网站内容管理</title>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  </head>
+  <body>
+    <!-- Include the script that builds the page and powers Decap CMS -->
+    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <script>
+      // 启用本地预览功能
+      CMS.registerPreviewStyle("/styles/content-preview.css");
+
+      // 如果在本地开发环境
+      if (window.location.hostname === "localhost") {
+        window.CMS_MANUAL_INIT = true;
+        window.decapCmsConfig = {
+          backend: {
+            name: "test-repo"
+          },
+          local_backend: true,
+          media_folder: "public/images/uploads",
+          public_folder: "/images/uploads",
+          publish_mode: "editorial_workflow",
+          locale: "zh_Hans",
+          load_config_file: false
+        };
+        CMS.init({ config: window.decapCmsConfig });
+      }
+    </script>
+  </body>
+</html> 

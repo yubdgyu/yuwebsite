@@ -1,0 +1,165 @@
+---
+interface Props {
+  title: string;
+  subtitle: string;
+  ctaText?: string;
+  ctaLink?: string;
+}
+
+const { 
+  title, 
+  subtitle, 
+  ctaText = "了解更多", 
+  ctaLink = "/about"
+} = Astro.props;
+
+// 导入 HeroAnimation 组件
+import HeroAnimation from './HeroAnimation';
+import SocialIcons from './SocialIcons';
+---
+
+<section class="relative bg-white dark:bg-gray-900 py-20 md:py-32 overflow-hidden flex items-center justify-center min-h-[90vh]">
+  <!-- SVG背景动画 -->
+  <div class="absolute inset-0 z-0 overflow-hidden opacity-20 dark:opacity-30 transition-opacity duration-500">
+    <HeroAnimation client:idle />
+  </div>
+
+  <div class="container mx-auto px-4 relative z-10">
+    <div class="flex flex-col items-center justify-center text-center max-w-3xl mx-auto">
+      <h1 class="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white leading-tight mb-6 animate-fade-in">
+        {title}
+      </h1>
+      <p class="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-6 max-w-2xl">
+        {subtitle}
+      </p>
+      
+      <!-- 社交图标 -->
+      <div class="mb-8">
+        <SocialIcons client:visible />
+      </div>
+      
+      <div class="flex flex-wrap gap-6 justify-center">
+        <div class="line-border-wrapper primary-line">
+          <a 
+            href={ctaLink} 
+            class="button-primary relative px-8 py-3 bg-transparent text-gray-900 dark:text-white hover:text-white font-medium rounded-lg transition-all duration-300 z-10"
+          >
+            {ctaText}
+          </a>
+        </div>
+        
+        <div class="line-border-wrapper secondary-line">
+          <a 
+            href="/projects" 
+            class="button-secondary relative px-8 py-3 bg-transparent text-gray-900 dark:text-white hover:text-white font-medium rounded-lg transition-all duration-300 z-10"
+          >
+            查看项目
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 交互式波浪SVG - 主题切换时会变化 -->
+  <div class="absolute bottom-0 left-0 w-full h-16 md:h-24 overflow-hidden z-[1]">
+    <svg 
+      viewBox="0 0 1200 120" 
+      preserveAspectRatio="none" 
+      class="absolute bottom-0 left-0 w-full h-full transition-colors duration-500"
+    >
+      <path 
+        d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V0C0,0,0,79.45,0,79.45c62.19-25.17,121.42-13.32,158.53,11.09C207.91,113.46,269.22,67.37,321.39,56.44Z" 
+        class="fill-gray-50 dark:fill-gray-800 transition-colors duration-500"
+      ></path>
+    </svg>
+  </div>
+</section>
+
+<style>
+  @keyframes slideLine {
+    0% { left: -100%; }
+    50% { left: 100%; }
+    100% { left: -100%; }
+  }
+  
+  .line-border-wrapper {
+    position: relative;
+    padding: 3px;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .line-border-wrapper::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    bottom: 0;
+    left: -100%;
+    z-index: 1;
+  }
+  
+  .primary-line::before {
+    background: linear-gradient(90deg, transparent, #9333ea, transparent);
+    animation: slideLine 4s infinite;
+  }
+  
+  .secondary-line::before {
+    background: linear-gradient(90deg, transparent, #06b6d4, transparent);
+    animation: slideLine 4s infinite;
+    animation-delay: 1s;
+  }
+  
+  .line-border-wrapper::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    background-color: inherit;
+    border-radius: 0.4rem;
+    z-index: 5;
+  }
+  
+  .button-primary, .button-secondary {
+    position: relative;
+    z-index: 10;
+    border: none;
+    background: white;
+    color: black;
+    height: 50px;
+    min-width: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .dark .button-primary, .dark .button-secondary {
+    background: #111827;
+    color: white;
+  }
+  
+  .button-primary:hover, .button-secondary:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    color: white;
+    background: rgba(79, 70, 229, 0.9);
+  }
+  
+  .dark .button-primary:hover, .dark .button-secondary:hover {
+    background: rgba(79, 70, 229, 0.9);
+    color: white;
+  }
+  
+  .line-border-wrapper:hover::before {
+    animation-duration: 2s;
+  }
+  
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 1s ease-out forwards;
+  }
+</style> 

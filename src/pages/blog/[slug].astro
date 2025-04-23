@@ -1,0 +1,250 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { promises as fs } from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
+import { marked } from 'marked';
+
+// 定义博客文章类型
+interface BlogPost {
+  title: string;
+  description: string;
+  date: string;
+  author: string;
+  authorImage: string;
+  category: string;
+  readingTime: string;
+  image: string;
+  slug: string;
+  tags: string[];
+  content?: string | Promise<string>;
+}
+
+export async function getStaticPaths() {
+  const contentDir = path.join(process.cwd(), 'public/content/blog');
+  const files = await fs.readdir(contentDir);
+  const markdownFiles = files.filter((file: string) => file.endsWith('.md'));
+
+  // 获取所有博客文章的辅助函数
+  async function getAllPosts(): Promise<BlogPost[]> {
+    const posts = await Promise.all(
+      markdownFiles.map(async (file) => {
+        const filePath = path.join(contentDir, file);
+        const content = await fs.readFile(filePath, 'utf-8');
+        const { data } = matter(content);
+        
+        // 确保返回的对象符合BlogPost接口
+        return {
+          title: data.title,
+          description: data.description,
+          date: data.date,
+          author: data.author,
+          authorImage: data.authorImage || "/images/avatar.jpg",
+          category: data.category,
+          readingTime: data.readingTime,
+          image: data.image || "/images/fallback.svg",
+          slug: data.slug,
+          tags: data.tags || []
+        } as BlogPost;
+      })
+    );
+
+    return posts;
+  }
+
+  const paths = await Promise.all(
+    markdownFiles.map(async (file) => {
+      const filePath = path.join(contentDir, file);
+      const content = await fs.readFile(filePath, 'utf-8');
+      const { data, content: markdownContent } = matter(content);
+      
+      // 转换为HTML
+      const htmlContent = marked(markdownContent);
+      
+      // 获取所有博客文章用于推荐相关文章
+      const allPosts = await getAllPosts();
+      // 过滤掉当前文章，并找出同类别或有相同标签的文章作为推荐
+      const relatedPosts = allPosts
+        .filter(post => post.slug !== data.slug)
+        .filter(post => {
+          return post.category === data.category || 
+                 post.tags.some(tag => data.tags.includes(tag));
+        })
+        .slice(0, 3); // 最多推荐3篇相关文章
+      
+      // 确保文章数据符合BlogPost接口
+      const postData: BlogPost = {
+        title: data.title,
+        description: data.description,
+        date: data.date,
+        author: data.author,
+        authorImage: data.authorImage || "/images/avatar.jpg",
+        category: data.category,
+        readingTime: data.readingTime,
+        image: data.image || "/images/fallback.svg",
+        slug: data.slug,
+        tags: data.tags || [],
+        content: htmlContent
+      };
+      
+      return {
+        params: { slug: data.slug },
+        props: { 
+          post: postData,
+          relatedPosts 
+        }
+      };
+    })
+  );
+
+  return paths;
+}
+
+const { post, relatedPosts } = Astro.props;
+
+// 日期格式化函数
+function formatDate(dateString: string) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('zh-CN', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+}
+---
+
+<Layout title={`${post.title} - Yu的个人网站`}>
+  <div class="pt-28 pb-16">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+        <!-- 文章头图 -->
+        <div class="relative h-64 md:h-96">
+          <img 
+            src={post.image} 
+            alt={post.title} 
+            class="w-full h-full object-cover"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-6 text-white">
+            <a 
+              href={`/blog/category/${post.category.toLowerCase().replace(/\s+/g, '-')}`}
+              class="inline-block mb-4 px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-sm hover:bg-white/30 transition"
+            >
+              {post.category}
+            </a>
+            <h1 class="text-3xl md:text-4xl font-bold mb-2">{post.title}</h1>
+            <div class="flex items-center text-sm">
+              <img 
+                src={post.authorImage || "/images/avatar.jpg"} 
+                alt={post.author}
+                class="w-8 h-8 rounded-full mr-2 object-cover"
+              />
+              <span class="mr-4">{post.author}</span>
+              <span class="mr-4">{formatDate(post.date)}</span>
+              <span>{post.readingTime} 阅读</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 文章内容 -->
+        <div class="p-6 md:p-10">
+          <div class="prose prose-lg dark:prose-invert max-w-none">
+            <Fragment set:html={post.content} />
+          </div>
+          
+          <!-- 标签 -->
+          <div class="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <div class="flex flex-wrap gap-2">
+              {post.tags.map((tag: string) => (
+                <span class="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors cursor-pointer">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 相关文章 -->
+      {relatedPosts.length > 0 && (
+        <div class="max-w-4xl mx-auto mt-16">
+          <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">推荐阅读</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {relatedPosts.map((relatedPost: BlogPost) => (
+              <a href={`/blog/${relatedPost.slug}`} class="group">
+                <article class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden h-full transition-transform group-hover:scale-105">
+                  <div class="relative h-40 overflow-hidden">
+                    <img 
+                      src={relatedPost.image} 
+                      alt={relatedPost.title} 
+                      class="w-full h-full object-cover transition-transform group-hover:scale-110"
+                    />
+                    <div class="absolute top-2 left-2">
+                      <span class="px-2 py-1 bg-gray-800 dark:bg-white text-white dark:text-gray-900 text-xs font-medium rounded-full">
+                        {relatedPost.category}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="p-4">
+                    <h3 class="text-lg font-semibold mb-2 text-gray-800 dark:text-white line-clamp-2">
+                      {relatedPost.title}
+                    </h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">{formatDate(relatedPost.date)}</p>
+                  </div>
+                </article>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+      
+      <!-- 返回博客列表 -->
+      <div class="max-w-4xl mx-auto mt-10 text-center">
+        <a 
+          href="/blog" 
+          class="inline-flex items-center px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded-full font-medium transition-all hover:bg-gray-300 dark:hover:bg-gray-600"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+          </svg>
+          返回博客列表
+        </a>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  /* 文章样式 */
+  .prose h1 {
+    @apply text-3xl font-bold text-gray-900 dark:text-white mb-6 mt-12;
+  }
+  
+  .prose h2 {
+    @apply text-2xl font-semibold text-gray-900 dark:text-white mb-4 mt-10;
+  }
+  
+  .prose h3 {
+    @apply text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 mt-8;
+  }
+  
+  .prose p {
+    @apply text-gray-700 dark:text-gray-300 mb-6 leading-relaxed;
+  }
+  
+  .prose ul {
+    @apply list-disc pl-6 mb-6 text-gray-700 dark:text-gray-300;
+  }
+  
+  .prose li {
+    @apply mb-2;
+  }
+  
+  .prose pre {
+    @apply bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto mb-6;
+  }
+  
+  .prose code {
+    @apply font-mono text-sm leading-relaxed;
+  }
+</style> 

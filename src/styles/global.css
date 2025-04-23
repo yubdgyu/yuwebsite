@@ -1,0 +1,168 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* 主题颜色变量 */
+  --color-brand: rgb(14, 165, 233); /* sky-500 */
+  --color-bg: rgb(255, 255, 255); /* white */
+  --color-bg-secondary: rgb(243, 244, 246); /* gray-100 */
+  --color-tx: rgb(17, 24, 39); /* gray-900 更深的黑色 */
+  --color-tx-secondary: rgb(55, 65, 81); /* gray-700 偏深灰色 */
+  --color-accent-main: rgb(59, 130, 246); /* blue-500 */
+  
+  /* 字体 */
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* 暗色模式 */
+.dark {
+  --color-brand: rgb(56, 189, 248); /* sky-400 */
+  --color-bg: rgb(17, 24, 39); /* gray-900 */
+  --color-bg-secondary: rgb(31, 41, 55); /* gray-800 */
+  --color-tx: rgb(255, 255, 255); /* white 纯白色 */
+  --color-tx-secondary: rgb(229, 231, 235); /* gray-200 偏白灰色 */
+  --color-accent-main: rgb(96, 165, 250); /* blue-400 */
+}
+
+/* 全局过渡效果 */
+.transition-theme {
+  transition-property: color, background-color, border-color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
+/* 基础文本样式应用主题色 */
+@layer base {
+  body {
+    @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-white;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-gray-900 dark:text-white;
+    transition: color 0.3s ease;
+  }
+  
+  p, li, span {
+    @apply text-gray-800 dark:text-gray-100;
+    transition: color 0.3s ease;
+  }
+  
+  /* 按钮样式 */
+  button, .btn {
+    @apply text-gray-900 dark:text-white;
+    transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+  }
+  
+  /* 链接样式 */
+  a {
+    @apply text-gray-900 dark:text-white;
+    transition: color 0.3s ease;
+  }
+  
+  a:hover {
+    @apply text-blue-600 dark:text-blue-400;
+  }
+  
+  /* 导航链接 */
+  nav a {
+    @apply text-gray-800 dark:text-gray-100;
+  }
+  
+  nav a:hover {
+    @apply text-blue-600 dark:text-blue-400;
+  }
+}
+
+/* SVG 图标样式 */
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  @apply text-gray-800 dark:text-white;
+  transition: color 0.3s ease;
+}
+
+.icon-sm {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.icon-lg {
+  width: 2rem;
+  height: 2rem;
+}
+
+/* 容器溢出修复 */
+.overflow-fix {
+  overflow: hidden;
+}
+
+/* 交互式SVG样式 */
+.interactive-svg path {
+  transition: fill 0.5s ease;
+}
+
+.dark .interactive-svg path {
+  animation: smooth-fade 6s ease-in-out infinite;
+  animation-delay: calc(var(--delay, 0) * 1s);
+  will-change: opacity;
+  transform: translate3d(0, 0, 0);
+}
+
+@keyframes smooth-fade {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 0.95; }
+}
+
+/* 针对暗模式下优化SVG性能 */
+.dark svg {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.dark .svg-animation {
+  filter: none !important;
+  opacity: 0.7;
+  transition: opacity 0.5s ease;
+}
+
+@layer base {
+html {
+  -webkit-text-size-adjust: 100%;
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  tab-size: 4;
+  scroll-behavior: smooth;
+}
+
+body {
+  line-height: inherit;
+  margin: 0;
+    color: var(--color-tx);
+  background-color: var(--color-bg);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* 图片优化 */
+  img, svg, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 表单元素样式修复 */
+  input, textarea, select, button {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: inherit;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+code, pre {
+  font-family: var(--font-mono);
+}
+}

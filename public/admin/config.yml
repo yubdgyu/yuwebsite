@@ -1,0 +1,86 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/images/uploads" # 上传文件存储位置
+public_folder: "/images/uploads" # 生成的公共URL
+
+# 开启本地模式（可选，便于开发）
+local_backend: true
+
+publish_mode: editorial_workflow # 启用编辑工作流
+locale: "zh_Hans" # 使用简体中文
+
+collections:
+  # 项目集合
+  - name: "projects"
+    label: "项目"
+    folder: "public/content/projects"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "标题", name: "title", widget: "string" }
+      - { label: "封面图", name: "cover", widget: "image" }
+      - { label: "GitHub链接", name: "github", widget: "string" }
+      - { label: "简介", name: "description", widget: "text" }
+      - { label: "标签", name: "tags", widget: "list" }
+      - { label: "排序", name: "order", widget: "number", default: 1 }
+
+  # 博客文章集合
+  - name: "blog"
+    label: "博客文章"
+    folder: "public/content/blog"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "标题", name: "title", widget: "string" }
+      - { label: "固定链接", name: "slug", widget: "string" }
+      - { label: "描述", name: "description", widget: "text" }
+      - { label: "发布日期", name: "date", widget: "datetime", format: "YYYY-MM-DD" }
+      - { label: "作者", name: "author", widget: "string", default: "Yu" }
+      - { label: "作者头像", name: "authorImage", widget: "image", default: "https://via.placeholder.com/100" }
+      - { label: "分类", name: "category", widget: "string" }
+      - { label: "阅读时间", name: "readingTime", widget: "string" }
+      - { label: "封面图片", name: "image", widget: "image" }
+      - { label: "标签", name: "tags", widget: "list" }
+      - { label: "正文", name: "body", widget: "markdown" }
+
+  # 个人信息集合
+  - name: "settings"
+    label: "网站设置"
+    files:
+      - name: "about"
+        label: "关于页面"
+        file: "public/content/settings/about.yml"
+        fields:
+          - { label: "个人照片", name: "photo", widget: "image" }
+          - { label: "姓名", name: "name", widget: "string" }
+          - { label: "职位", name: "position", widget: "string" }
+          - { label: "个人简介", name: "bio", widget: "markdown" }
+          - label: "技能"
+            name: "skills"
+            widget: "list"
+            fields:
+              - { label: "名称", name: "name", widget: "string" }
+              - { label: "等级 (0-100)", name: "level", widget: "number", min: 0, max: 100 }
+              - { label: "颜色", name: "color", widget: "select", options: ["blue", "indigo", "green", "sky", "emerald", "yellow", "purple", "cyan", "red", "pink"] }
+          - label: "工作经历"
+            name: "experiences"
+            widget: "list"
+            fields:
+              - { label: "时间段", name: "period", widget: "string" }
+              - { label: "职位", name: "position", widget: "string" }
+              - { label: "公司", name: "company", widget: "string" }
+              - { label: "描述", name: "description", widget: "text" }
+      
+      - name: "social"
+        label: "社交媒体"
+        file: "public/content/settings/social.yml"
+        fields:
+          - { label: "电子邮箱", name: "email", widget: "string" }
+          - { label: "微信", name: "wechat", widget: "string" }
+          - { label: "GitHub", name: "github", widget: "string" }
+          - { label: "推特", name: "twitter", widget: "string", required: false }
+          - { label: "领英", name: "linkedin", widget: "string", required: false }
+          - { label: "抖音", name: "tiktok", widget: "string", required: false }
+          - { label: "哔哩哔哩", name: "bilibili", widget: "string", required: false } 

@@ -1,0 +1,126 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HeroSection from '../components/HeroSection.astro';
+import SkillsSection from '../components/SkillsSection.astro';
+import LatestBlogPreview from '../components/LatestBlogPreview.astro';
+import { promises as fs } from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
+
+// 定义博客文章类型
+interface BlogPost {
+	title: string;
+	description: string;
+	date: string;
+	image: string;
+	slug: string;
+	category: string;
+	tags: string[];
+}
+
+// 获取所有博客文章
+const contentDir = path.join(process.cwd(), 'public/content/blog');
+const files = await fs.readdir(contentDir);
+const markdownFiles = files.filter((file: string) => file.endsWith('.md'));
+
+// 处理每个Markdown文件
+const posts: BlogPost[] = [];
+for (const file of markdownFiles) {
+	const filePath = path.join(contentDir, file);
+	const content = await fs.readFile(filePath, 'utf-8');
+	const { data } = matter(content);
+	
+	posts.push({
+		title: data.title,
+		description: data.description,
+		date: data.date,
+		image: data.image || "/images/fallback.svg",
+		slug: data.slug,
+		category: data.category,
+		tags: data.tags || []
+	});
+}
+
+// 排序博客文章，最新的在前面
+posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+---
+
+<Layout 
+	title="Yu的个人网站 - 首页"
+	description="我的个人网站，分享我的项目和经验"
+>
+	<!-- 介绍 -->
+	<HeroSection
+		title="你好，我是Yu"
+		subtitle="我是一名热爱技术的全栈开发者，喜欢探索新兴技术和解决实际问题。"
+		ctaText="了解更多"
+		ctaLink="/about"
+	/>
+	
+	<!-- 技能板块 -->
+	<SkillsSection />
+	
+	<!-- 最新博客板块 -->
+	<LatestBlogPreview posts={posts} />
+</Layout>
+
+<style>
+.border-wrapper {
+	position: relative;
+	padding: 3px;
+	border-radius: 0.5rem;
+	overflow: hidden;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.border-wrapper::before {
+	content: '';
+	position: absolute;
+	background: linear-gradient(90deg, var(--color-tx), var(--color-tx-secondary), var(--color-tx), var(--color-tx-secondary));
+	background-size: 400% 100%;
+	animation: gradient 4s linear infinite;
+	border-radius: 0.5rem;
+	z-index: 0;
+}
+
+.border-wrapper::after {
+	content: '';
+	position: absolute;
+	inset: 3px;
+	background-color: inherit;
+	border-radius: 0.4rem;
+	z-index: 5;
+}
+
+.button-secondary {
+	position: relative;
+	z-index: 10;
+	border: none;
+	background: white;
+	color: black;
+	display: block;
+	min-width: 160px;
+}
+
+.dark .button-secondary {
+	background: #111827;
+	color: white;
+}
+
+.button-secondary:hover {
+	transform: translateY(-2px) scale(1.05);
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+	color: white;
+	background: rgba(79, 70, 229, 0.9);
+}
+
+.border-wrapper:hover::before {
+	animation: gradient 2s linear infinite;
+}
+
+@keyframes gradient {
+	0% { background-position: 0% 50%; }
+	50% { background-position: 100% 50%; }
+	100% { background-position: 0% 50%; }
+}
+</style>

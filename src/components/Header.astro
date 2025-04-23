@@ -1,0 +1,118 @@
+---
+// Header 组件
+---
+
+<header id="main-header" class="fixed top-0 w-full z-50 shadow-sm transition-all duration-300 bg-white dark:bg-gray-900">
+  <div class="container mx-auto px-4">
+    <div class="flex justify-between items-center py-4">
+      <a href="/" class="text-xl font-bold text-gray-900 dark:text-white transition-colors">Yu</a>
+      
+      <!-- 桌面导航 -->
+      <nav class="hidden md:flex items-center space-x-8">
+        <a href="/" class="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors">首页</a>
+        <a href="/projects" class="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors">项目</a>
+        <a href="/about" class="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors">关于我</a>
+        <a href="/blog" class="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors">博客</a>
+      </nav>
+      
+      <div class="flex items-center space-x-4">
+        <!-- 主题切换按钮 -->
+        <button id="theme-toggle" class="p-2 rounded-lg text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" aria-label="Toggle Dark Mode">
+          <!-- 亮色模式图标 (在暗模式时显示) -->
+          <svg id="light-icon" xmlns="http://www.w3.org/2000/svg" class="icon hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <!-- 暗色模式图标 (在亮模式时显示) -->
+          <svg id="dark-icon" xmlns="http://www.w3.org/2000/svg" class="icon block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        </button>
+        
+        <!-- 移动端菜单按钮 -->
+        <button id="mobile-menu-button" class="p-2 rounded-lg text-gray-800 dark:text-white md:hidden hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" aria-label="Menu">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 移动端菜单 -->
+  <div id="mobile-menu" class="md:hidden py-4 px-4 shadow-md hidden bg-white dark:bg-gray-900">
+    <nav class="flex flex-col space-y-4">
+      <a href="/" class="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors">首页</a>
+      <a href="/projects" class="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors">项目</a>
+      <a href="/about" class="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors">关于我</a>
+      <a href="/blog" class="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors">博客</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // 主题切换功能
+  const themeToggle = document.getElementById('theme-toggle');
+  
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      // 切换暗黑模式class
+      document.documentElement.classList.toggle('dark');
+      
+      // 更新data-theme属性
+      const isDark = document.documentElement.classList.contains('dark');
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+      
+      // 保存用户偏好
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+  }
+  
+  // 移动端菜单功能
+  const mobileMenuButton = document.getElementById('mobile-menu-button');
+  const mobileMenu = document.getElementById('mobile-menu');
+  
+  if (mobileMenuButton && mobileMenu) {
+    mobileMenuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+    
+    // 点击页面其他区域关闭菜单
+    document.addEventListener('click', (event) => {
+      // 确保点击的不是菜单按钮或菜单本身
+      const target = event.target as Node;
+      if (mobileMenuButton && mobileMenu && 
+          !mobileMenuButton.contains(target) && 
+          !mobileMenu.contains(target)) {
+        mobileMenu.classList.add('hidden');
+      }
+    });
+  }
+  
+  // 滚动时隐藏/显示导航栏
+  (() => {
+    const header = document.getElementById('main-header');
+    let lastScrollTop = 0;
+    const scrollThreshold = 50; // 滚动多少距离后触发隐藏
+    
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      
+      // 如果滚动距离小于阈值，始终显示导航栏
+      if (scrollTop < scrollThreshold) {
+        header?.classList.remove('-translate-y-full');
+        return;
+      }
+      
+      // 向下滚动，隐藏导航栏
+      if (scrollTop > lastScrollTop) {
+        header?.classList.add('-translate-y-full');
+      } 
+      // 向上滚动，显示导航栏
+      else {
+        header?.classList.remove('-translate-y-full');
+      }
+      
+      lastScrollTop = scrollTop;
+    }, { passive: true });
+  })();
+</script> 

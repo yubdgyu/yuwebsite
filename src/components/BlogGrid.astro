@@ -1,0 +1,52 @@
+---
+import BlogCard from './BlogCard.astro';
+
+interface BlogPost {
+  title: string;
+  description: string;
+  date: string;
+  author?: string;
+  authorImage?: string;
+  category?: string;
+  readingTime?: string;
+  image?: string;
+  slug: string;
+}
+
+interface Props {
+  posts: BlogPost[];
+  columns?: 2 | 3 | 4;
+}
+
+const { posts, columns = 3 } = Astro.props;
+
+// 根据列数确定网格类名
+const gridClass = {
+  2: 'grid-cols-1 md:grid-cols-2',
+  3: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
+  4: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
+}[columns];
+---
+
+<div class={`grid gap-6 ${gridClass}`}>
+  {posts.map((post) => (
+    <BlogCard 
+      title={post.title}
+      description={post.description}
+      date={post.date}
+      author={post.author}
+      authorImage={post.authorImage}
+      category={post.category}
+      readingTime={post.readingTime}
+      image={post.image}
+      slug={post.slug}
+    />
+  ))}
+</div>
+
+{posts.length === 0 && (
+  <div class="py-20 text-center">
+    <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">暂无博客文章</h3>
+    <p class="text-gray-500 dark:text-gray-400">请稍后再来查看</p>
+  </div>
+)} 

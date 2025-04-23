@@ -1,0 +1,116 @@
+---
+// 引入必要的组件
+import BlogCard from './BlogCard.astro';
+
+interface BlogPost {
+  title: string;
+  description: string;
+  date: string;
+  image: string;
+  slug: string;
+  category: string;
+  tags: string[];
+}
+
+interface Props {
+  posts: BlogPost[];
+}
+
+const { posts } = Astro.props;
+const displayPosts = posts.slice(0, 3); // 只显示最新的3篇文章
+---
+
+<section class="py-16 bg-gray-50 dark:bg-gray-900">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-4">最新文章</h2>
+      <p class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+        浏览我最新的技术文章和分享，了解我的学习心得和专业见解。
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {displayPosts.map((post) => (
+        <BlogCard
+          title={post.title}
+          description={post.description}
+          date={post.date}
+          image={post.image}
+          slug={post.slug}
+          category={post.category}
+          tags={post.tags}
+        />
+      ))}
+    </div>
+    
+    <div class="text-center mt-10">
+      <a 
+        href="/blog" 
+        class="px-6 py-3 bg-gray-800 text-white dark:bg-gray-700 dark:text-white rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600 transition-all duration-300 shadow-md"
+      >
+        查看所有文章
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+.border-wrapper {
+  position: relative;
+  padding: 3px;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.border-wrapper::before {
+  content: '';
+  position: absolute;
+  background: linear-gradient(90deg, var(--color-tx), var(--color-tx-secondary), var(--color-tx), var(--color-tx-secondary));
+  background-size: 400% 100%;
+  animation: gradient 4s linear infinite;
+  border-radius: 0.5rem;
+  z-index: 0;
+}
+
+.border-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  background-color: inherit;
+  border-radius: 0.4rem;
+  z-index: 5;
+}
+
+.button-secondary {
+  position: relative;
+  z-index: 10;
+  border: none;
+  background: white;
+  color: black;
+  display: block;
+  min-width: 160px;
+}
+
+.dark .button-secondary {
+  background: #111827;
+  color: white;
+}
+
+.button-secondary:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  color: white;
+  background: rgba(79, 70, 229, 0.9);
+}
+
+.border-wrapper:hover::before {
+  animation: gradient 2s linear infinite;
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+</style> 

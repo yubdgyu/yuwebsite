@@ -1,0 +1,59 @@
+---
+// Footer 组件
+import FooterIcons from './FooterIcons';
+
+interface Props {
+  siteTitle?: string;
+  currentYear?: number;
+}
+
+const { 
+  siteTitle = "个人博客",
+  currentYear = new Date().getFullYear()
+} = Astro.props;
+
+---
+
+<footer class="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
+  <div class="container mx-auto px-4 py-8">
+    <div class="flex flex-col items-center justify-center">
+      <!-- 社交媒体链接 -->
+      <FooterIcons client:visible iconSize={24} />
+      
+      <!-- 版权信息 -->
+      <div class="text-center text-gray-800 dark:text-white text-sm">
+        <p>© {currentYear} {siteTitle}. 保留所有权利。</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // 微信弹窗
+  const wechatLink = document.getElementById('wechat-link');
+  const wechatModal = document.getElementById('wechat-modal');
+  const closeModal = document.getElementById('close-modal');
+  
+  if (wechatLink && wechatModal) {
+    wechatLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      wechatModal.classList.remove('hidden');
+      wechatModal.classList.add('flex');
+    });
+  }
+  
+  if (closeModal && wechatModal) {
+    closeModal.addEventListener('click', () => {
+      wechatModal.classList.remove('flex');
+      wechatModal.classList.add('hidden');
+    });
+    
+    // 点击模态框外部关闭
+    wechatModal.addEventListener('click', (e) => {
+      if (e.target === wechatModal) {
+        wechatModal.classList.remove('flex');
+        wechatModal.classList.add('hidden');
+      }
+    });
+  }
+</script> 
