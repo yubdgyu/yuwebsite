@@ -136,8 +136,8 @@ tags: ["标签1", "标签2"]
 
 如有任何问题或建议，请通过以下方式联系我：
 
-- GitHub: [你的GitHub用户名](https://github.com/your-username)
-- 邮箱: your-email@example.com
+- GitHub: [yubdgyu](https://github.com/yubdgyu)
+- 邮箱: 1216164436@qq.com
 
 ---
 
