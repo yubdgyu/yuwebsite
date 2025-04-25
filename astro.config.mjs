@@ -23,5 +23,19 @@ export default defineConfig({
   compressHTML: true,
   build: {
     inlineStylesheets: 'auto'
+  },
+  vite: {
+    ssr: {
+      noExternal: ['react-icons']
+    },
+    optimizeDeps: {
+      include: ['react-icons']
+    },
+    // 添加特殊处理以解决react-icons导入问题
+    build: {
+      rollupOptions: {
+        external: ['react-icons/lib/esm/iconBase.js']
+      }
+    }
   }
 });
