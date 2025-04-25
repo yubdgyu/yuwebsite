@@ -6,8 +6,10 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
+    "vercel-build": "cross-env NODE_OPTIONS=--max_old_space_size=4096 astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "clean": "rm -rf node_modules/.cache"
   },
   "dependencies": {
     "@astrojs/react": "^3.0.9",
@@ -19,6 +21,7 @@
     "@types/react-dom": "^18.2.18",
     "astro": "^3.0.12",
     "autoprefixer": "^10.4.16",
+    "cross-env": "^7.0.3",
     "gray-matter": "^4.0.3",
     "postcss": "^8.4.31",
     "react": "^18.2.0",
@@ -30,7 +33,9 @@
     "@types/node": "^20.10.0"
   },
   "overrides": {
-    "rollup": "^4.9.0",
-    "@rollup/rollup-linux-x64-gnu": "4.9.0"
+    "rollup": "3.29.4"
+  },
+  "resolutions": {
+    "rollup": "3.29.4"
   }
 }
