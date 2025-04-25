@@ -19,7 +19,7 @@ export default defineConfig({
     enabled: false
   },
 
-  site: 'https://yuwebsite.vercel.app/',
+  site: 'https://your-domain.com',
   compressHTML: true,
   build: {
     inlineStylesheets: 'auto'
