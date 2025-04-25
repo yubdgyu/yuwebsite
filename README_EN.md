@@ -1,10 +1,50 @@
-# YuWebsite - Modern Personal Website Template
+# Personal Website - Yu's Tech Blog
 
-![YuWebsite](public/images/preview.svg)
+This is a personal website built with Astro and React, showcasing my tech blog, projects, and personal introduction.
 
-English | [简体中文](README.md)
+## Demo Site
 
-YuWebsite is a modern personal website template built with Astro and React, featuring a blog system, project showcase, dark mode, and more. The template is built with TailwindCSS and features responsive design for various devices.
+**Visit Online**: [https://yuwebsite.vercel.app/](https://yuwebsite.vercel.app/)
+
+## Tech Stack
+
+- [Astro](https://astro.build/) - Static site generator
+- [React](https://reactjs.org/) - UI component library
+- [Tailwind CSS](https://tailwindcss.com/) - Styling solution
+- [TypeScript](https://www.typescriptlang.org/) - Type safety
+- [Vercel](https://vercel.com/) - Website deployment and hosting
+
+## Features
+
+- Responsive design
+- Blog post system
+- Project showcase
+- Personal profile
+- SEO optimization
+
+## Local Development
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+## Deployment
+
+This project uses Vercel for automatic deployment. Each push to the main branch triggers a new deployment.
+
+## License
+
+© 2025 Yu's Personal Website. All rights reserved.
 
 ## ✨ Features
 
