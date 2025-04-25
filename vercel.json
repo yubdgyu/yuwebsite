@@ -1,19 +1,9 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "installCommand": "npm install --omit=optional --no-optional --no-package-lock --no-audit",
-        "buildCommand": "npm run vercel-build"
-      }
-    }
-  ],
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/index.html" }
-  ],
+  "buildCommand": "npm run vercel-build",
+  "installCommand": "npm install",
+  "framework": "astro",
+  "outputDirectory": "dist",
   "github": {
     "silent": true
   },
