@@ -1,14 +1,6 @@
 {
-  "version": 2,
-  "buildCommand": "npm run vercel-build",
-  "installCommand": "npm install",
   "framework": "astro",
-  "outputDirectory": "dist",
-  "github": {
-    "silent": true
-  },
-  "env": {
-    "ASTRO_TELEMETRY_DISABLED": "1",
-    "NODE_OPTIONS": "--max_old_space_size=4096"
-  }
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install"
 } 
