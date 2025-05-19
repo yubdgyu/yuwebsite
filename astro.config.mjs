@@ -40,8 +40,15 @@ export default defineConfig({
     // 添加特殊处理以解决react-icons导入问题
     build: {
       rollupOptions: {
-        external: ['react-icons/lib/esm/iconBase.js']
-      }
+        external: ['react-icons/lib/esm/iconBase.js'],
+        // 禁用特定于平台的优化，使用通用构建
+        treeshake: {
+          moduleSideEffects: 'no-external'
+        }
+      },
+      // 使用更保守的打包设置
+      target: 'es2020',
+      minify: 'esbuild'
     }
   }
 });
