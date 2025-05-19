@@ -22,7 +22,7 @@
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
     "@vitejs/plugin-react": "^4.0.4",
-    "astro": "^3.5.5",
+    "astro": "^5.7.13",
     "astro-decap-cms-oauth": "^0.5.1",
     "autoprefixer": "^10.4.16",
     "gray-matter": "^4.0.3",

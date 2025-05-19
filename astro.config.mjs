@@ -3,18 +3,22 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import vercel from '@astrojs/vercel/static';
 import tailwind from '@astrojs/tailwind';
-import decapCmsOauth from 'astro-decap-cms-oauth';
+// 暂时注释掉这个导入，因为它可能与当前版本不兼容
+// import decapCmsOauth from 'astro-decap-cms-oauth';
 
 // https://astro.build/config
 export default defineConfig({
   integrations: [
     react(),
     tailwind(),
-    decapCmsOauth()
+    // 暂时注释掉这个集成
+    // decapCmsOauth()
   ],
   
   // 使用Vercel静态适配器
   adapter: vercel(),
+  // 修改输出模式以匹配 vercel/static 适配器的要求
+  output: 'static',
   
   // 禁用开发工具栏
   devToolbar: {
