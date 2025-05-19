@@ -2,8 +2,5 @@
   "framework": "astro",
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
-  "installCommand": "npm install",
-  "environmentVariables": {
-    "ROLLUP_SKIP_DEFAULTS": "true"
-  }
+  "installCommand": "npm install"
 } 
