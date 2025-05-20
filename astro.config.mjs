@@ -3,19 +3,19 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import vercel from '@astrojs/vercel';
 import tailwind from '@astrojs/tailwind';
-import decapCmsOauth from 'astro-decap-cms-oauth';
+// import decapCmsOauth from 'astro-decap-cms-oauth';
 
 // https://astro.build/config
 export default defineConfig({
   integrations: [
     react(),
     tailwind(),
-    decapCmsOauth(),
+    // decapCmsOauth(),
   ],
   
   // 使用Vercel官方适配器，支持API路由
   adapter: vercel(),
-  output: 'static',
+  output: 'server',
   site: 'https://yuwebsite.vercel.app/',
   compressHTML: true,
   build: {
