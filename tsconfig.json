@@ -10,9 +10,9 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "module": "NodeNext"
+    "module": "ESNext"
   }
 }
