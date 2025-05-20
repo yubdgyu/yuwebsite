@@ -15,7 +15,7 @@ export default defineConfig({
   
   // 使用Vercel官方适配器，支持API路由
   adapter: vercel(),
-  output: 'server',
+  output: 'static',
   site: 'https://yuwebsite.vercel.app/',
   compressHTML: true,
   build: {
