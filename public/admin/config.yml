@@ -1,6 +1,10 @@
 backend:
   name: git-gateway
   branch: main
+  repo: yubdgyu/yuwebsite
+  site_domain: yuwebsite.vercel.app
+  base_url: https://yuwebsite.vercel.app
+  auth_endpoint: oauth
 
 media_folder: "public/images/uploads" # 上传文件存储位置
 public_folder: "/images/uploads" # 生成的公共URL

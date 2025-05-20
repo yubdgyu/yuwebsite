@@ -3,16 +3,22 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import vercel from '@astrojs/vercel/static';
 import tailwind from '@astrojs/tailwind';
+// 暂时注释掉这个导入，因为它可能与当前版本不兼容
+// import decapCmsOauth from 'astro-decap-cms-oauth';
 
 // https://astro.build/config
 export default defineConfig({
   integrations: [
     react(),
     tailwind(),
+    // 暂时注释掉这个集成
+    // decapCmsOauth()
   ],
   
   // 使用Vercel静态适配器
   adapter: vercel(),
+  // 修改输出模式以匹配 vercel/static 适配器的要求
+  output: 'static',
   
   // 禁用开发工具栏
   devToolbar: {
@@ -34,8 +40,15 @@ export default defineConfig({
     // 添加特殊处理以解决react-icons导入问题
     build: {
       rollupOptions: {
-        external: ['react-icons/lib/esm/iconBase.js']
-      }
+        external: ['react-icons/lib/esm/iconBase.js'],
+        // 禁用特定于平台的优化，使用通用构建
+        treeshake: {
+          moduleSideEffects: 'no-external'
+        }
+      },
+      // 使用更保守的打包设置
+      target: 'es2020',
+      minify: 'esbuild'
     }
   }
 });
